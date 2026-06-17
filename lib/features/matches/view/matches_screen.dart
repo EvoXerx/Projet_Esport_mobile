@@ -1,48 +1,61 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../../core/constants/app_strings.dart';
-import '../../../core/enums/game_type.dart';
-import '../../../domain/models/match_status.dart';
-import '../../../domain/models/match_summary.dart';
-import '../../../domain/models/team.dart';
+import '../view_model/matches_view_model.dart';
 import 'widgets/game_filter_chips.dart';
 import 'widgets/match_card.dart';
 import 'widgets/section_header.dart';
 
-class MatchesScreen extends StatefulWidget {
+class MatchesScreen extends StatelessWidget {
   const MatchesScreen({super.key});
 
   @override
-  State<MatchesScreen> createState() => _MatchesScreenState();
-}
-
-class _MatchesScreenState extends State<MatchesScreen> {
-  GameType? _filter;
-
-  // Match factice pour tester l'affichage (TEMPORAIRE — sera remplacé par le ViewModel)
-  final _fake = const MatchSummary(
-    id: 1,
-    game: GameType.csgo,
-    tournamentName: 'PGL Major',
-    teamA: Team(id: 1, name: 'Vitality'),
-    teamB: Team(id: 2, name: 'NAVI'),
-    status: MatchStatus.running,
-    currentMapLabel: 'Map 1',
-  );
-
-  @override
   Widget build(BuildContext context) {
+    final vm = context.watch<MatchesViewModel>();
+
     return Scaffold(
       appBar: AppBar(title: const Text(AppStrings.appTitle)),
-      body: ListView(
+      body: Column(
         children: [
           GameFilterChips(
-            selected: _filter,
-            onSelected: (game) => setState(() => _filter = game),
+            selected: vm.selectedFilter,
+            onSelected: (game) => context.read<MatchesViewModel>().selectFilter(game),
           ),
-          const SectionHeader(AppStrings.liveSection),
-          MatchCard(match: _fake, onTap: () {}),
+          Expanded(child: _buildBody(context, vm)),
         ],
       ),
+    );
+  }
+
+  Widget _buildBody(BuildContext context, MatchesViewModel vm) {
+    if (vm.isLoading && vm.liveMatches.isEmpty && vm.upcomingMatches.isEmpty) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    if (vm.error != null) {
+      return Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(vm.error!),
+            const SizedBox(height: 8),
+            ElevatedButton(
+              onPressed: () => context.read<MatchesViewModel>().load(),
+              child: const Text(AppStrings.retry),
+            ),
+          ],
+        ),
+      );
+    }
+    if (vm.liveMatches.isEmpty && vm.upcomingMatches.isEmpty) {
+      return const Center(child: Text(AppStrings.noMatch));
+    }
+    return ListView(
+      children: [
+        if (vm.liveMatches.isNotEmpty) const SectionHeader(AppStrings.liveSection),
+        ...vm.liveMatches.map((m) => MatchCard(match: m, onTap: () {})),
+        if (vm.upcomingMatches.isNotEmpty) const SectionHeader(AppStrings.upcomingSection),
+        ...vm.upcomingMatches.map((m) => MatchCard(match: m, onTap: () {})),
+      ],
     );
   }
 }
