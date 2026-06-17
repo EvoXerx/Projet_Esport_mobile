@@ -43,13 +43,9 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
-
-# --- Documentation projet (ne pas committer) ---
 ARCHITECTURE.md
 GITHUB.md
 TUTORIAL.md
-
-# --- Outillage Claude / IA (ne pas committer) ---
 .claude/
 CLAUDE.md
 .mcp.json
