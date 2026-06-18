@@ -1,3 +1,4 @@
+/// Équipe (modèle domaine consommé par l'UI).
 class Team {
   final int id;
   final String name;

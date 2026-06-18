@@ -1,5 +1,6 @@
 import '../../domain/models/player.dart';
 
+/// Représentation JSON d'un joueur PandaScore (issu de `team.players[]`).
 class PlayerDto {
   final int id;
   final String name;
@@ -15,6 +16,7 @@ class PlayerDto {
     this.imageUrl,
   });
 
+  /// Construit un PlayerDto depuis le JSON de l'API.
   factory PlayerDto.fromJson(Map<String, dynamic> json) {
     return PlayerDto(
       id: json['id'] as int,
@@ -25,7 +27,7 @@ class PlayerDto {
     );
   }
 
-  // kills/deaths/assists/rating : [FALLBACK] -> pas dans ce endpoint, restent null.
+  /// Convertit en [Player] domaine. Les K/D/A ne sont pas fournis par ce endpoint -> restent null.
   Player toDomain() {
     return Player(
       id: id,

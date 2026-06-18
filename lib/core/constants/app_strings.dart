@@ -1,3 +1,4 @@
+/// Tous les textes FR de l'app, centralisés (un seul endroit à modifier/traduire).
 class AppStrings {
   static const appTitle = 'Esport Arena';
   static const liveSection = 'En direct';
