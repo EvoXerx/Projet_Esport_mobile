@@ -5,9 +5,19 @@ import '../view_model/matches_view_model.dart';
 import 'widgets/game_filter_chips.dart';
 import 'widgets/match_card.dart';
 import 'widgets/section_header.dart';
+import '../../match_detail/view/match_detail_screen.dart';
+
 
 class MatchesScreen extends StatelessWidget {
   const MatchesScreen({super.key});
+
+    void _openDetail(BuildContext context, int matchId) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => MatchDetailScreen(matchId: matchId)),
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -52,10 +62,11 @@ class MatchesScreen extends StatelessWidget {
     return ListView(
       children: [
         if (vm.liveMatches.isNotEmpty) const SectionHeader(AppStrings.liveSection),
-        ...vm.liveMatches.map((m) => MatchCard(match: m, onTap: () {})),
+        ...vm.liveMatches.map((m) => MatchCard(match: m, onTap: () => _openDetail(context, m.id))),
         if (vm.upcomingMatches.isNotEmpty) const SectionHeader(AppStrings.upcomingSection),
-        ...vm.upcomingMatches.map((m) => MatchCard(match: m, onTap: () {})),
+        ...vm.upcomingMatches.map((m) => MatchCard(match: m, onTap: () => _openDetail(context, m.id))),
       ],
     );
   }
+  
 }

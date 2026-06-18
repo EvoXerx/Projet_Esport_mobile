@@ -12,13 +12,16 @@ class EsportArenaApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: AppStrings.appTitle,
-      theme: AppTheme.dark(),
-      debugShowCheckedModeBanner: false,
-      home: ChangeNotifierProvider(
-        create: (_) => MatchesViewModel(repository)..load(),
-        child: const MatchesScreen(),
+    return Provider.value(
+      value: repository,
+      child: MaterialApp(
+        title: AppStrings.appTitle,
+        theme: AppTheme.dark(),
+        debugShowCheckedModeBanner: false,
+        home: ChangeNotifierProvider(
+          create: (_) => MatchesViewModel(repository)..load(),
+          child: const MatchesScreen(),
+        ),
       ),
     );
   }

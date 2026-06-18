@@ -3,6 +3,9 @@ import '../../core/utils/result.dart';
 import '../../domain/models/match_summary.dart';
 import '../models/match_dto.dart';
 import '../services/pandascore_api_service.dart';
+import '../../domain/models/match_detail.dart';
+
+
 
 class MatchRepository {
   final PandascoreApiService _api;
@@ -39,4 +42,20 @@ class MatchRepository {
         .where((m) => m.game != null) // retire les jeux non gérés par l'app
         .toList();
   }
+
+    Future<Result<MatchDetail>> fetchMatchDetail(int id) async {
+    try {
+      final raw = await _api.getMatch(id);
+      final detail = MatchDto.fromJson(raw).toDetail();
+      if (detail == null) {
+        return const Failure('Match indisponible');
+      }
+      return Success(detail);
+    } on ApiException catch (e) {
+      return Failure(e.message);
+    } catch (e) {
+      return Failure('Erreur inattendue: $e');
+    }
+  }
+
 }

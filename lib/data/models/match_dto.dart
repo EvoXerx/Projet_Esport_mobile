@@ -1,4 +1,5 @@
 import '../../core/enums/game_type.dart';
+import '../../domain/models/match_detail.dart';
 import '../../domain/models/match_status.dart';
 import '../../domain/models/match_summary.dart';
 import 'game_dto.dart';
@@ -12,6 +13,8 @@ class MatchDto {
   final String tournamentName;
   final List<TeamDto> opponents;
   final List<GameDto> games;
+  final int numberOfGames;          // NOUVEAU
+  final Map<int, int> scoresByTeamId; // NOUVEAU : team_id -> score
 
   const MatchDto({
     required this.id,
@@ -21,6 +24,8 @@ class MatchDto {
     required this.tournamentName,
     required this.opponents,
     required this.games,
+    required this.numberOfGames,
+    required this.scoresByTeamId,
   });
 
   factory MatchDto.fromJson(Map<String, dynamic> json) {
@@ -40,12 +45,17 @@ class MatchDto {
           .map((o) => TeamDto.fromJson(o['opponent'] as Map<String, dynamic>))
           .toList(),
       games: gamesJson.map((g) => GameDto.fromJson(g as Map<String, dynamic>)).toList(),
+      numberOfGames: json['number_of_games'] as int? ?? 1,
+      scoresByTeamId: {
+        for (final r in (json['results'] as List<dynamic>? ?? []))
+          if (r['team_id'] != null)
+            (r['team_id'] as int): (r['score'] as int? ?? 0),
+      },
     );
   }
 
   static DateTime? _parseDate(String? raw) => raw == null ? null : DateTime.tryParse(raw);
 
-  // null si moins de 2 adversaires connus (BYE) -> le repository ignore ce match.
   MatchSummary? toDomain() {
     if (opponents.length < 2) return null;
 
@@ -66,6 +76,17 @@ class MatchDto {
       status: MatchStatus.fromApi(status),
       currentMapLabel: runningGame != null ? 'Map ${runningGame.position}' : null,
       beginAt: beginAt,
+    );
+  }
+
+  MatchDetail? toDetail() {
+    final summary = toDomain();
+    if (summary == null) return null; // garantit opponents.length >= 2
+    return MatchDetail(
+      summary: summary,
+      scoreA: scoresByTeamId[opponents[0].id] ?? 0,
+      scoreB: scoresByTeamId[opponents[1].id] ?? 0,
+      bestOf: 'BO$numberOfGames',
     );
   }
 }
