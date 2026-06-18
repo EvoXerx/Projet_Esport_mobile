@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
-import 'core/theme/app_theme.dart';
+import 'package:provider/provider.dart';
 import 'core/constants/app_strings.dart';
+import 'core/theme/app_theme.dart';
+import 'data/repositories/match_repository.dart';
+import 'features/matches/view/matches_screen.dart';
+import 'features/matches/view_model/matches_view_model.dart';
 
 class EsportArenaApp extends StatelessWidget {
-  const EsportArenaApp({super.key});
+  final MatchRepository repository;
+  const EsportArenaApp({super.key, required this.repository});
 
   @override
   Widget build(BuildContext context) {
@@ -11,8 +16,9 @@ class EsportArenaApp extends StatelessWidget {
       title: AppStrings.appTitle,
       theme: AppTheme.dark(),
       debugShowCheckedModeBanner: false,
-      home: const Scaffold(
-        body: Center(child: Text('Esport Arena')),
+      home: ChangeNotifierProvider(
+        create: (_) => MatchesViewModel(repository)..load(),
+        child: const MatchesScreen(),
       ),
     );
   }
