@@ -5,15 +5,18 @@ import '../../../data/repositories/match_repository.dart';
 import '../../../domain/models/match_detail.dart';
 import '../../../domain/models/match_status.dart';
 import '../view_model/match_detail_view_model.dart';
+import 'widgets/rosters_tab.dart';
 import 'widgets/score_header.dart';
 
+/// Écran détail : crée le ViewModel (en lisant le repository fourni globalement)
+/// et affiche la vue interne.
 class MatchDetailScreen extends StatelessWidget {
   final int matchId;
   const MatchDetailScreen({super.key, required this.matchId});
 
   @override
   Widget build(BuildContext context) {
-    final repo = context.read<MatchRepository>(); // fourni globalement (étape 4)
+    final repo = context.read<MatchRepository>();
     return ChangeNotifierProvider(
       create: (_) => MatchDetailViewModel(repo, matchId)..load(),
       child: const _MatchDetailView(),
@@ -21,6 +24,8 @@ class MatchDetailScreen extends StatelessWidget {
   }
 }
 
+/// Vue interne : gère les états chargement/erreur, puis affiche les 2 onglets
+/// Aperçu (score) et Effectifs.
 class _MatchDetailView extends StatelessWidget {
   const _MatchDetailView();
 
@@ -39,7 +44,7 @@ class _MatchDetailView extends StatelessWidget {
     final isLive = detail.summary.status == MatchStatus.running;
 
     return DefaultTabController(
-      length: 3,
+      length: 2,
       child: Scaffold(
         appBar: AppBar(
           title: Text(isLive
@@ -49,15 +54,13 @@ class _MatchDetailView extends StatelessWidget {
             tabs: [
               Tab(text: AppStrings.overview),
               Tab(text: AppStrings.rosters),
-              Tab(text: AppStrings.analytics),
             ],
           ),
         ),
         body: TabBarView(
           children: [
-            ListView(children: [ScoreHeader(detail: detail)]),     // Aperçu
-            const Center(child: Text(AppStrings.rosters)),          // Effectifs (#8)
-            const Center(child: Text(AppStrings.analyticsSoon)),    // Analyses (placeholder)
+            ListView(children: [ScoreHeader(detail: detail)]),
+            RostersTab(detail: detail),
           ],
         ),
       ),

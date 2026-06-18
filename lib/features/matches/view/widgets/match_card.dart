@@ -5,9 +5,11 @@ import '../../../../domain/models/match_status.dart';
 import '../../../../domain/models/match_summary.dart';
 import 'live_badge.dart';
 
+/// Carte d'un match dans la liste : jeu + tournoi + badge LIVE, les 2 équipes,
+/// et les liens décoratifs Stats/Parier. `onTap` est décidé par le parent.
 class MatchCard extends StatelessWidget {
   final MatchSummary match;
-  final VoidCallback onTap; // ce qui se passe au clic (décidé par le parent)
+  final VoidCallback onTap;
 
   const MatchCard({super.key, required this.match, required this.onTap});
 
@@ -22,7 +24,6 @@ class MatchCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Ligne du haut : logo jeu + tournoi + badge LIVE
               Row(
                 children: [
                   if (match.game != null)
@@ -38,7 +39,6 @@ class MatchCard extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 16),
-              // Ligne des équipes
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -48,7 +48,6 @@ class MatchCard extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 12),
-              // Ligne du bas : Stats + Parier (décoratifs)
               const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -64,6 +63,7 @@ class MatchCard extends StatelessWidget {
   }
 }
 
+/// Nom d'une équipe stylé, réutilisé pour les deux équipes de la carte.
 class _TeamName extends StatelessWidget {
   final String name;
   const _TeamName({required this.name});

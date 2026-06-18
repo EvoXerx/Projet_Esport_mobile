@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../domain/models/match_detail.dart';
 
+/// En-tête de l'onglet Aperçu : les 2 équipes, le score et le format (bestOf).
 class ScoreHeader extends StatelessWidget {
   final MatchDetail detail;
   const ScoreHeader({super.key, required this.detail});
@@ -26,6 +27,7 @@ class ScoreHeader extends StatelessWidget {
     );
   }
 
+  /// Colonne icône + nom d'une équipe.
   Widget _team(String name) => Column(
         children: [
           const Icon(Icons.shield, size: 40),

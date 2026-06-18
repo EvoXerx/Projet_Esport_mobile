@@ -2,14 +2,16 @@ import '../../core/enums/game_type.dart';
 import 'match_status.dart';
 import 'team.dart';
 
+/// Résumé d'un match affiché dans la liste. `game` est null si le jeu n'est pas
+/// géré (le repository écarte alors le match) ; `currentMapLabel` vient de games[].
 class MatchSummary {
   final int id;
-  final GameType? game; // null si jeu non géré par l'app -> le repository ignore le match
+  final GameType? game;
   final String tournamentName;
   final Team teamA;
   final Team teamB;
   final MatchStatus status;
-  final String? currentMapLabel; // ex "Map 2", dérivé de games[]
+  final String? currentMapLabel;
   final DateTime? beginAt;
 
   const MatchSummary({

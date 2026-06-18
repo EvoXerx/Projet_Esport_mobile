@@ -4,6 +4,7 @@ import '../../../core/utils/result.dart';
 import '../../../data/repositories/match_repository.dart';
 import '../../../domain/models/match_summary.dart';
 
+/// État de l'écran liste : matchs live/à venir, filtre de jeu, chargement, erreur.
 class MatchesViewModel extends ChangeNotifier {
   final MatchRepository _repo;
   MatchesViewModel(this._repo);
@@ -14,6 +15,7 @@ class MatchesViewModel extends ChangeNotifier {
   List<MatchSummary> liveMatches = [];
   List<MatchSummary> upcomingMatches = [];
 
+  /// Charge les matchs live et à venir (selon le filtre courant) et notifie l'UI.
   Future<void> load() async {
     isLoading = true;
     error = null;
@@ -39,6 +41,7 @@ class MatchesViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Change le filtre de jeu sélectionné et recharge les matchs.
   void selectFilter(GameType? game) {
     selectedFilter = game;
     load();

@@ -3,6 +3,7 @@ import '../../../core/utils/result.dart';
 import '../../../data/repositories/match_repository.dart';
 import '../../../domain/models/match_detail.dart';
 
+/// État de l'écran détail d'un match (identifié par [matchId]).
 class MatchDetailViewModel extends ChangeNotifier {
   final MatchRepository _repo;
   final int matchId;
@@ -12,6 +13,7 @@ class MatchDetailViewModel extends ChangeNotifier {
   String? error;
   MatchDetail? detail;
 
+  /// Charge le détail du match (score + effectifs) et notifie l'UI.
   Future<void> load() async {
     isLoading = true;
     error = null;

@@ -1,14 +1,16 @@
 import 'match_summary.dart';
 import 'player.dart';
 
+/// Détail d'un match : le résumé enrichi du score, du format (bestOf) et des
+/// effectifs. `winProbA/B` restent null tant qu'aucune source ne les fournit.
 class MatchDetail {
-  final MatchSummary summary; // on réutilise tout le résumé (équipes, jeu, tournoi…)
+  final MatchSummary summary;
   final int scoreA;
   final int scoreB;
-  final String bestOf;        // "BO5"
-  final List<Player> rosterA; // vides pour le #7, remplis au #8
+  final String bestOf;
+  final List<Player> rosterA;
   final List<Player> rosterB;
-  final int? winProbA;        // [FALLBACK] null tant qu'aucune source -> barre masquée (#8)
+  final int? winProbA;
   final int? winProbB;
 
   const MatchDetail({

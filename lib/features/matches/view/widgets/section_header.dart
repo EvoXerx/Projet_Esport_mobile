@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// Titre de section dans la liste (ex. "En direct", "Aujourd'hui").
 class SectionHeader extends StatelessWidget {
   final String title;
   const SectionHeader(this.title, {super.key});

@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/enums/game_type.dart';
 
+/// Barre horizontale de filtres par jeu. `selected` null = "Tous". Widget
+/// contrôlé : il ne stocke pas l'état, il prévient le parent via `onSelected`.
 class GameFilterChips extends StatelessWidget {
-  final GameType? selected;             // null = "Tous"
+  final GameType? selected;
   final ValueChanged<GameType?> onSelected;
 
   const GameFilterChips({
@@ -27,6 +29,7 @@ class GameFilterChips extends StatelessWidget {
     );
   }
 
+  /// Construit une puce sélectionnable (active = mise en avant).
   Widget _chip(String label, bool active, VoidCallback onTap) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4),

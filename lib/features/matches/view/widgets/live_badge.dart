@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_theme.dart';
 
+/// Pastille rouge "LIVE" affichée sur les matchs en cours.
 class LiveBadge extends StatelessWidget {
   const LiveBadge({super.key});
 

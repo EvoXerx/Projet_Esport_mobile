@@ -1,5 +1,6 @@
 import '../../domain/models/team.dart';
 
+/// Représentation JSON d'une équipe PandaScore (couche data).
 class TeamDto {
   final int id;
   final String name;
@@ -15,6 +16,7 @@ class TeamDto {
     this.location,
   });
 
+  /// Construit un TeamDto depuis le JSON de l'API.
   factory TeamDto.fromJson(Map<String, dynamic> json) {
     return TeamDto(
       id: json['id'] as int,
@@ -25,6 +27,7 @@ class TeamDto {
     );
   }
 
+  /// Convertit ce DTO en modèle domaine [Team] (propre, indépendant de l'API).
   Team toDomain() {
     return Team(
       id: id,
